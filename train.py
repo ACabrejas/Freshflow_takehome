@@ -18,7 +18,12 @@ def sarimax_train(series):
 
 def auto_arima_forecast(series, feature, split):
     '''
-    Generation of model and fit for a given series with auto_arima
+    Generation of model and fit for a given series with auto_arima.
+    Function takes all series as input, splits it as training and testing, and returns:
+    - Model
+    - Forecast dataframe
+    - Test timeseries to calculate errors
+
     :param series: Pandas dataframe containing the data to be predicted
     :param feature: Column name in the dataframe to predict
     :param split: Ratio of data to be used as training data [0,1]
@@ -28,9 +33,9 @@ def auto_arima_forecast(series, feature, split):
     series_train = series.iloc[:int(len(series.index) * split), :]
     series_test = series.iloc[int(len(series.index) * split):, :]
 
-    model = auto_arima(series[feature], trace=True, error_action='ignore', suppress_warnings=True)
-    model.fit(series[feature])
+    model = auto_arima(series_train[feature], trace=True, error_action='ignore', suppress_warnings=True)
+    model.fit(series_train[feature])
     forecast = model.predict(n_periods=len(series_test))
     forecast = pd.DataFrame(forecast, index=series_test.index, columns=['prediction'])
 
-    return model, forecast
+    return model, forecast, series_test
