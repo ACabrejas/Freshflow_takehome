@@ -27,7 +27,7 @@ def auto_arima_forecast(series, feature, split):
     :param series: Pandas dataframe containing the data to be predicted
     :param feature: Column name in the dataframe to predict
     :param split: Ratio of data to be used as training data [0,1]
-    :return: trained model, forecast as DataFrame
+    :return: trained model, forecast as DataFrame with "prediction" label, testing split of the original series
     '''
 
     series_train = series.iloc[:int(len(series.index) * split), :]
